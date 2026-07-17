@@ -5,8 +5,10 @@
    accordions opening). Run the cursor onto a piece and it curls away from
    you; pile pieces flip at a touch; on mobile, tap a piece to flip it. */
 (function () {
-  var YELLOW = 'rgb(255,210,75)';
-  var GREEN = 'rgb(30,171,84)';
+  // saturation-compensated for the 0.8 piece alpha: over the white page a
+  // single piece displays the original palette (255,210,75 / 30,171,84)
+  var YELLOW = 'rgb(255,199,30)';
+  var GREEN = 'rgb(0,150,41)';
   var R = 9; // fold radius
 
   var pageEl = document.querySelector('.page');
@@ -214,7 +216,9 @@
     var pb = photoBox();
     if (pb) {
       for (var gy = pb.top + step / 2.5; gy < pb.bottom; gy += step) {
-        for (var gx = pb.left + step / 3; gx < pb.right; gx += step) {
+        // columns overshoot the box edges: narrow rect pieces + jitter can
+        // otherwise leave slivers of photo showing at the sides
+        for (var gx = pb.left - step / 4; gx < pb.right + step / 3; gx += step) {
           var gd = pn++ % 2 === 0;
           mkPiece(gd ? 'circle' : 'rect',
             gx + (Math.random() - 0.5) * 14,
@@ -240,6 +244,18 @@
       mkPiece(pd2 ? 'circle' : 'rect',
         mc.x + Math.cos(ang) * r * spreadX,
         heapY + Math.sin(ang) * r * spreadY,
+        (Math.random() - 0.5) * 2.6, psc).pile = true;
+    }
+    // strays past the heap's edge, thinning outward, so the pile trails
+    // off organically instead of ending at a hard boundary
+    var outN = mobile ? 8 : 12;
+    for (i = 0; i < outN; i++) {
+      var pd3 = pn++ % 2 === 0;
+      var ang2 = Math.random() * Math.PI * 2;
+      var r2 = 0.55 + Math.pow(Math.random(), 0.8) * 0.75;
+      mkPiece(pd3 ? 'circle' : 'rect',
+        mc.x + Math.cos(ang2) * r2 * spreadX * 1.5,
+        heapY + Math.sin(ang2) * r2 * spreadY * 1.4,
         (Math.random() - 0.5) * 2.6, psc).pile = true;
     }
 

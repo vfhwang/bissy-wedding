@@ -219,7 +219,9 @@ h1.type-display { top: 238px; margin: 0; }
   width: 118px;
   height: 118px;
   border-radius: 50%;
-  background: var(--color-confetti-yellow);
+  /* matches the confetti pieces: same compensated yellow at the same 80%
+     alpha (on the background only, so the time labels stay solid black) */
+  background: rgba(255, 199, 30, 0.8);
 }
 .schedule-dots .dot .type-body {
   position: absolute;
