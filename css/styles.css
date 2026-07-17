@@ -96,6 +96,7 @@ a:hover { color: var(--color-confetti-green); }
   z-index: 2;
   pointer-events: none;
   overflow: hidden;
+  opacity: 0.8;
 }
 
 /* ---- footer: confetti pile hiding the sign-off message ------------------ */
@@ -126,13 +127,12 @@ a:hover { color: var(--color-confetti-green); }
   border-radius: 4px;
 }
 
-/* all copy sits below the confetti (pieces fully cover the text until
-   flipped away); only links take the pointer. In flow (not absolute) so the
-   tail section drives the page height: the fixed-position blocks hang from
-   padding-top, the tail flows after it. */
+/* all copy sits above the confetti; only links take the pointer.
+   In flow (not absolute) so the tail section drives the page height:
+   the fixed-position blocks hang from padding-top, the tail flows after it. */
 .layer-content {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   padding-top: 3830px;
   pointer-events: none;
 }
@@ -252,7 +252,7 @@ h1.type-display { top: 238px; margin: 0; }
   .layer-content {
     position: relative;
     inset: auto;
-    z-index: 1;
+    z-index: 3;
     padding: calc(50vh + 90px) 24px 90px;
     padding-top: calc(50svh + 90px);
     display: flex;
