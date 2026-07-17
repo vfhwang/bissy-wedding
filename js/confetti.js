@@ -121,6 +121,16 @@
     t.lockDir = null;
   }
 
+  // footer photo box in page coords; valid pre-load thanks to the img's
+  // width/height attributes (the layout box exists before the pixels arrive)
+  function photoBox() {
+    var img = document.querySelector('.footer-photo');
+    if (!img) return null;
+    var r = img.getBoundingClientRect(), p = pageEl.getBoundingClientRect();
+    if (r.width < 10 || r.height < 10) return null;
+    return { left: r.left - p.left, right: r.right - p.left, top: r.top - p.top, bottom: r.bottom - p.top };
+  }
+
   function msgCentre() {
     var span = document.querySelector('.footer-message span');
     var srect = span.getBoundingClientRect(), prect = pageEl.getBoundingClientRect();
@@ -142,7 +152,10 @@
     // page-anchored canvas scrolls natively with the text (zero lag); dpr capped so PH*dpr stays under common renderbuffer limits
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2, 8192 / PH));
     renderer.setSize(W, PH);
-    renderer.domElement.style.cssText = 'display:block;width:100%;height:100%';
+    // setSize gives the canvas an explicit px height; keep it (not 100%) so the
+    // canvas doesn't stretch while the page height animates (accordions) —
+    // onPageResize follows the movement instead
+    renderer.domElement.style.display = 'block';
     layer.appendChild(renderer.domElement);
     var lrect = layer.getBoundingClientRect();
     originX = lrect.left + window.scrollX;
@@ -169,7 +182,7 @@
     }
     // two pieces overlapping the title
     var titleX = mobile ? Math.min(W * 0.3, 120) : 180;
-    var titleY = mobile ? 150 : 270;
+    var titleY = mobile ? window.innerHeight / 2 : 270;
     mk('circle', W / 2 - titleX - Math.random() * 40, titleY + Math.random() * 60, 0);
     mk('rect', W / 2 + titleX + Math.random() * 40, titleY - 20 + Math.random() * 80, (Math.random() - 0.5) * 1.2);
 
@@ -189,13 +202,26 @@
       }
     }
 
-    // footer pile: a heap hiding the sign-off message. First a guaranteed
-    // cover row along the measured text, then a scatter heaped around it.
+    // footer pile: a heap hiding the photo and the sign-off message. First a
+    // guaranteed cover — a jittered grid over the photo box and a row along
+    // the measured text — then a scatter heaped around the whole cluster.
     var mc = msgCentre();
     pileMsgY = mc.y;
     var psc = mobile ? 0.5 : 0.62;
     var pn = 0;
-    var step = mobile ? 46 : 64;
+    var step = mobile ? 46 : 60;
+    var pb = photoBox();
+    if (pb) {
+      for (var gy = pb.top + step / 2.5; gy < pb.bottom; gy += step) {
+        for (var gx = pb.left + step / 3; gx < pb.right; gx += step) {
+          var gd = pn++ % 2 === 0;
+          mkPiece(gd ? 'circle' : 'rect',
+            gx + (Math.random() - 0.5) * 14,
+            gy + (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 2.6, psc).pile = true;
+        }
+      }
+    }
     for (var px = mc.left + step / 3; px < mc.right; px += step) {
       var pd = pn++ % 2 === 0;
       mkPiece(pd ? 'circle' : 'rect',
@@ -203,14 +229,16 @@
         mc.y + (Math.random() - 0.5) * 16,
         (Math.random() - 0.5) * 2.6, psc).pile = true;
     }
-    var spreadX = mobile ? 120 : 250, spreadY = mobile ? 70 : 80;
+    var heapY = pb ? (pb.top + mc.y) / 2 : mc.y;
+    var spreadX = mobile ? 120 : 250;
+    var spreadY = pb ? (mc.y - pb.top) / 2 + 40 : (mobile ? 70 : 80);
     for (i = 0; i < 14; i++) {
       var pd2 = pn++ % 2 === 0;
       var ang = Math.random() * Math.PI * 2;
       var r = Math.pow(Math.random(), 0.6); // cluster toward the centre
       mkPiece(pd2 ? 'circle' : 'rect',
         mc.x + Math.cos(ang) * r * spreadX,
-        mc.y + Math.sin(ang) * r * spreadY,
+        heapY + Math.sin(ang) * r * spreadY,
         (Math.random() - 0.5) * 2.6, psc).pile = true;
     }
 
@@ -242,20 +270,24 @@
     prevActive = true; // run the loop at least once (drives the throw-in)
   }
 
-  // page height changes (accordions opening/closing) resize the canvas in
-  // place and carry the pile along with the message — no re-scatter
+  // page height changes (accordions opening/closing): called every
+  // ResizeObserver tick so the pile tracks the animating accordion frame by
+  // frame instead of jumping once at the end. The buffer only ever grows
+  // (with headroom), so mid-animation follows never reallocate; the canvas
+  // overhang past the page bottom is clipped by the layer's overflow:hidden
   function onPageResize() {
     if (!renderer || pageEl.clientWidth !== canW) return; // width changes rebuild via the resize listener
     var PH = pageEl.clientHeight;
-    if (Math.abs(PH - canH) < 2) return;
-    canH = PH;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2, 8192 / PH));
-    renderer.setSize(canW, PH);
-    cam.bottom = PH;
-    cam.updateProjectionMatrix();
-    var newY = msgCentre().y;
-    var dy = newY - pileMsgY;
-    pileMsgY = newY;
+    if (PH > canH) {
+      canH = PH + 600;
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2, 8192 / canH));
+      renderer.setSize(canW, canH);
+      cam.bottom = canH;
+      cam.updateProjectionMatrix();
+    }
+    var dy = msgCentre().y - pileMsgY;
+    if (Math.abs(dy) < 0.1) return;
+    pileMsgY += dy;
     for (var i = 0; i < pieces.length; i++) {
       var t = pieces[i];
       if (t.pile) { t.cy += dy; t.mesh.position.y = t.cy; }
@@ -370,16 +402,37 @@
   }
 
   // tap-to-flip: a touch on a resting piece rolls it right over, folding
-  // away from the tap point
+  // away from the tap point. A desktop click instead flips every resting
+  // piece near the cursor, each away from the click point.
   window.addEventListener('pointerdown', function (e) {
-    if (e.pointerType === 'mouse' || !pieces || !renderer) return;
+    if (!pieces || !renderer) return;
     var wx = e.clientX + window.scrollX - originX;
     var wy = e.clientY + window.scrollY - originY;
-    for (var i = pieces.length - 1; i >= 0; i--) { // topmost piece first
-      var t = pieces[i];
-      if (!t.landed || t.dragging || t.settleTo !== null) continue;
-      if (localHit(t, wx, wy)) {
-        triggerFlip(t, dirFromHit());
+    if (e.pointerType === 'mouse') {
+      if (e.button !== 0) return;
+      var RADIUS = 200;
+      var any = false;
+      for (var i = 0; i < pieces.length; i++) {
+        var t = pieces[i];
+        if (!t.landed || t.dragging || t.settleTo !== null) continue;
+        var dx = t.cx - wx, dy = t.cy - wy;
+        var d = Math.hypot(dx, dy);
+        if (d > RADIUS) continue;
+        // world-space "away from cursor", converted to the piece's local
+        // space (triggerFlip expects a local direction, like dirFromHit)
+        SV.set(d > 4 ? dx / d : 1, d > 4 ? dy / d : 0, 0)
+          .applyQuaternion(SQ.copy(t.mesh.quaternion).invert());
+        triggerFlip(t, new THREE.Vector2(SV.x, SV.y).normalize());
+        any = true;
+      }
+      if (any) prevActive = true; // wake the loop from its idle fast path
+      return;
+    }
+    for (var j = pieces.length - 1; j >= 0; j--) { // topmost piece first
+      var t2 = pieces[j];
+      if (!t2.landed || t2.dragging || t2.settleTo !== null) continue;
+      if (localHit(t2, wx, wy)) {
+        triggerFlip(t2, dirFromHit());
         prevActive = true; // wake the loop from its idle fast path
         return;
       }
@@ -402,11 +455,9 @@
     }, 150);
   });
 
-  var roTimer;
-  new ResizeObserver(function () {
-    clearTimeout(roTimer);
-    roTimer = setTimeout(onPageResize, 120); // settle after accordion animations
-  }).observe(pageEl);
+  // no debounce: fires every frame of the accordion height transition, and
+  // onPageResize is cheap once the buffer has grown
+  new ResizeObserver(onPageResize).observe(pageEl);
 
   setup();
   requestAnimationFrame(tick);

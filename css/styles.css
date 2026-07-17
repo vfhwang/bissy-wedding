@@ -113,6 +113,17 @@ a:hover { color: var(--color-confetti-green); }
   top: 58%;
   transform: translateY(-50%);
   text-align: center;
+  font-size: 18px;
+}
+/* small photo tucked behind the confetti pile, just above the sign-off */
+.footer-photo {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, calc(-100% - 36px));
+  width: 200px;
+  height: auto;
+  border-radius: 4px;
 }
 
 /* all copy sits above the confetti; only links take the pointer.
@@ -148,7 +159,12 @@ h1.type-display { top: 238px; margin: 0; }
 .s-rsvp      { top: 3130px; }
 .h-gifting   { top: 3420px; }
 .s-gifting   { top: 3490px; }
-.s-weddinglist { top: 3600px; }
+.s-weddinglist {
+  top: 3600px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+}
 /* tail: Useful Info + accordions + confetti pile flow together, so opening
    an accordion pushes the pile down instead of leaving a fixed gap */
 .tail .block { position: static; }
@@ -191,6 +207,13 @@ h1.type-display { top: 238px; margin: 0; }
 
 /* ---- schedule: staggered yellow dots ------------------------------------ */
 
+/* horizontal scatter in "spread units": 10px at full width, shrinking
+   linearly below ~980px viewport so the outermost dots and their labels
+   never get clipped at the page edges */
+.schedule-dots {
+  --su: min(10px, calc((50vw - 190px) / 30));
+}
+
 .schedule-dots .dot {
   position: absolute;
   width: 118px;
@@ -216,13 +239,21 @@ h1.type-display { top: 238px; margin: 0; }
 
   /* the page becomes a flowing column instead of a fixed-height canvas */
   .page { height: auto; }
-  h1.type-display { top: 140px; }
+  /* the `.block { position: static }` rule below would otherwise pin the
+     title to the page top; keep it absolute, centered in the first viewport */
+  h1.type-display {
+    position: absolute;
+    top: 50vh;
+    top: 50svh;
+    transform: translateY(-50%);
+  }
 
   .layer-content {
     position: relative;
     inset: auto;
     z-index: 3;
-    padding: 260px 24px 90px;
+    padding: calc(50vh + 90px) 24px 90px;
+    padding-top: calc(50svh + 90px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -231,7 +262,12 @@ h1.type-display { top: 238px; margin: 0; }
   .tail { display: contents; } /* children join the flex column directly */
 
   .s-venue { margin-top: 28px; }
-  .s-intro { margin-top: 90px; max-width: 320px; }
+  /* enough margin that the intro lands past the first viewport */
+  .s-intro {
+    margin-top: calc(50vh - 180px);
+    margin-top: max(90px, calc(50svh - 180px));
+    max-width: 320px;
+  }
   .s-nextday { margin-top: 70px; max-width: 340px; }
   .s-nextday-address { margin-top: 16px; }
   .h-dresscode, .h-rsvp, .h-gifting, .h-info { margin-top: 95px; }
@@ -250,14 +286,14 @@ h1.type-display { top: 238px; margin: 0; }
     position: relative;
     left: 0 !important;
     top: 0 !important;
-    width: 100px;
-    height: 100px;
+    width: 72px;
+    height: 72px;
     flex: none;
   }
-  .schedule-dots .dot .type-body { font-size: 15px; width: 140px; }
-  .schedule-dots .dot:nth-child(odd) { transform: translateX(-68px); }
-  .schedule-dots .dot:nth-child(even) { transform: translateX(68px); }
-  .schedule-dots .dot:nth-child(3n) { transform: translateX(22px); }
+  .schedule-dots .dot .type-body { font-size: 15px; width: 130px; }
+  .schedule-dots .dot:nth-child(odd) { transform: translateX(-56px); }
+  .schedule-dots .dot:nth-child(even) { transform: translateX(56px); }
+  .schedule-dots .dot:nth-child(3n) { transform: translateX(20px); }
 
   .accordions {
     position: static;
@@ -270,5 +306,7 @@ h1.type-display { top: 238px; margin: 0; }
   .footer-message {
     max-width: 240px;
     margin: 0 auto;
+    font-size: 14px;
   }
+  .footer-photo { width: 160px; }
 }
