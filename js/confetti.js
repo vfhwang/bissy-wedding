@@ -32,8 +32,9 @@
   var geoCache = {}; // pieces of the same shape and scale share one geometry
 
   var VERT = 'uniform float uFold,uR,uZSign;uniform vec2 uDir;varying vec2 vUv;varying float vDist;void main(){vUv=uv;vec2 dir=normalize(uDir);vec3 p=position;float s=dot(position.xy,dir);float dist=uFold-s;if(dist>0.0){float a=dist/uR;float along;float z;if(a<=3.14159265){along=uFold-uR*sin(a);z=uR*(1.0-cos(a));}else{along=uFold+(dist-3.14159265*uR);z=2.0*uR;}p.xy=position.xy+dir*(along-s);p.z+=z*uZSign;}vDist=dist;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}';
-  // flat shading: no fold gradient or shadow, just a solid tint per face
-  var FRAG = 'uniform vec3 uCol;uniform float uShape,uR,uZSign;varying vec2 vUv;varying float vDist;void main(){if(uShape>0.5 && length(vUv-0.5)>0.5) discard;vec3 col=uCol;float back=(uZSign>0.0)?0.0:1.0;if(vDist>uR*1.5707963) back=1.0-back;if(back>0.5) col*=0.955;gl_FragColor=vec4(col,1.0);}';
+  // flat shading: no fold gradient or shadow, just a solid tint per face.
+  // 0.8 alpha per piece, so overlapping pieces visibly stack darker
+  var FRAG = 'uniform vec3 uCol;uniform float uShape,uR,uZSign;varying vec2 vUv;varying float vDist;void main(){if(uShape>0.5 && length(vUv-0.5)>0.5) discard;vec3 col=uCol;float back=(uZSign>0.0)?0.0:1.0;if(vDist>uR*1.5707963) back=1.0-back;if(back>0.5) col*=0.955;gl_FragColor=vec4(col,0.8);}';
 
   function mkPiece(type, cx, cy, rot, sc) {
     var w = (type === 'circle' ? 159 : 85) * sc, h = (type === 'circle' ? 159 : 252) * sc;
@@ -45,7 +46,7 @@
       uCol: { value: new THREE.Color(type === 'circle' ? YELLOW : GREEN) }
     };
     var mat = new THREE.ShaderMaterial({
-      uniforms: uniforms, side: THREE.DoubleSide, transparent: false,
+      uniforms: uniforms, side: THREE.DoubleSide, transparent: true,
       vertexShader: VERT, fragmentShader: FRAG
     });
     var mesh = new THREE.Mesh(geo, mat);

@@ -96,7 +96,6 @@ a:hover { color: var(--color-confetti-green); }
   z-index: 2;
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.8;
 }
 
 /* ---- footer: confetti pile hiding the sign-off message ------------------ */
