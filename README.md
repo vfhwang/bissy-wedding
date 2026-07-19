@@ -4,11 +4,11 @@ Static sites for Issy and Billy's wedding (Saturday 12th September 2026, Waltham
 
 Three sites share one design (CSS/JS/assets) and deploy as one Vercel project, with each domain routed to its page by the host-based rewrites in `vercel.json`:
 
-- `/index.html` — the main (London) wedding site, served on the primary domain
-- `/north/index.html` — the northern wedding
-- `/party/index.html` — the evening party (reduced schedule, no gifting/parking)
+- `/london/index.html` — the main (London) wedding site, served on the primary domain
+- `/north/index.html` — the northern wedding (bissynorthernwedding.com)
+- `/party/index.html` — the evening party (bissywedding.party; reduced schedule, no gifting/parking)
 
-To wire up the new domains: replace the placeholder hosts in `vercel.json`, add all domains to the Vercel project, and point their DNS at Vercel. Any page can be previewed on any deployment by path (`/north/`, `/party/`).
+No page lives at the repo root: Vercel checks the filesystem before rewrites, so a root `index.html` would shadow the host routing on every domain. The catch-all rewrite serves the London page at `/` for the primary domain and deployment previews. Locally (plain file server), open the pages by path: `/london/`, `/north/`, `/party/`.
 
 ## Run
 
