@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "REPLACE-WITH-NORTHERN-WEDDING-DOMAIN" }],
+      "destination": "/north/index.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "REPLACE-WITH-PARTY-DOMAIN" }],
+      "destination": "/party/index.html"
+    }
+  ]
+}

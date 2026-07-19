@@ -1,6 +1,14 @@
-# Issy & Billy — wedding website
+# Issy & Billy — wedding websites
 
-Single-page static site for Issy and Billy's wedding (Saturday 12th September 2026, Walthamstow Wetlands Engine House, London). Implemented from the claude.ai/design project "Wedding Site.dc.html".
+Static sites for Issy and Billy's wedding (Saturday 12th September 2026, Walthamstow Wetlands Engine House, London). Implemented from the claude.ai/design project "Wedding Site.dc.html".
+
+Three sites share one design (CSS/JS/assets) and deploy as one Vercel project, with each domain routed to its page by the host-based rewrites in `vercel.json`:
+
+- `/index.html` — the main (London) wedding site, served on the primary domain
+- `/north/index.html` — the northern wedding
+- `/party/index.html` — the evening party (reduced schedule, no gifting/parking)
+
+To wire up the new domains: replace the placeholder hosts in `vercel.json`, add all domains to the Vercel project, and point their DNS at Vercel. Any page can be previewed on any deployment by path (`/north/`, `/party/`).
 
 ## Run
 

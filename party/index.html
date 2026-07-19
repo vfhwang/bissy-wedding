@@ -8,6 +8,19 @@
 <link rel="preload" href="/assets/fonts/Moulin-Regular-Trial.otf" as="font" type="font/otf" crossorigin>
 <link rel="preload" href="/assets/fonts/TT-Commons-Medium.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="/css/styles.css">
+<style>
+/* party page: fewer sections than the main site, so the desktop canvas is
+   shorter and the fixed block positions move up. Mobile flows automatically. */
+@media (min-width: 701px) {
+  .layer-content { padding-top: 2900px; }
+  .s-nextday { top: 1880px; }
+  .s-nextday-address { top: 1955px; }
+  .h-dresscode { top: 2180px; }
+  .s-dresscode { top: 2250px; }
+  .h-rsvp { top: 2460px; }
+  .s-rsvp { top: 2530px; }
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -20,33 +33,22 @@
 
   <div class="layer-content">
     <div class="type-body block s-date">Saturday 12th September 2026
-3pm</div>
+8pm</div>
 
     <div class="type-body block s-venue">Walthamstow Wetlands
 Engine House,
 London</div>
 
-    <div class="type-body block s-intro">We are getting married and we’d love to celebrate with you!</div>
+    <div class="type-body block s-intro">We’d love you to join us for our wedding party!</div>
 
     <div class="schedule-dots">
-      <div class="dot" style="left: calc(50% - var(--su) * 43); top: 1120px"><div class="type-body" style="transform: translate(calc(-50% + 10px), calc(-50% - 12px))">15:00
-Guest arrival</div></div>
-      <div class="dot" style="left: calc(50% - var(--su) * 11.4); top: 1200px"><div class="type-body" style="transform: translate(calc(-50% - 14px), calc(-50% + 8px))">15:30
-Ceremony</div></div>
-      <div class="dot" style="left: calc(50% + var(--su) * 23.4); top: 1240px"><div class="type-body" style="transform: translate(calc(-50% + 8px), calc(-50% + 14px))">16:00
-Reception drinks,
-canapés</div></div>
-      <div class="dot" style="left: calc(50% - var(--su) * 33.4); top: 1384px"><div class="type-body" style="transform: translate(calc(-50% - 10px), calc(-50% - 14px))">17:30
-Speeches</div></div>
-      <div class="dot" style="left: calc(50% - var(--su) * 5); top: 1490px"><div class="type-body" style="transform: translate(calc(-50% + 16px), calc(-50% + 4px))">18:00
-Dinner</div></div>
-      <div class="dot" style="left: calc(50% + var(--su) * 9); top: 1626px"><div class="type-body" style="transform: translate(calc(-50% - 12px), calc(-50% + 12px))">20:00
+      <div class="dot" style="left: calc(50% - var(--su) * 30); top: 1120px"><div class="type-body" style="transform: translate(calc(-50% + 10px), calc(-50% - 12px))">20:00
 Party</div></div>
-      <div class="dot" style="left: calc(50% + var(--su) * 30); top: 1756px"><div class="type-body" style="transform: translate(calc(-50% + 6px), calc(-50% - 16px))">20:15
+      <div class="dot" style="left: calc(50% + var(--su) * 23.4); top: 1270px"><div class="type-body" style="transform: translate(calc(-50% + 6px), calc(-50% - 16px))">20:15
 First dance</div></div>
-      <div class="dot" style="left: calc(50% + var(--su) * 28.4); top: 1984px"><div class="type-body" style="transform: translate(calc(-50% - 16px), calc(-50% - 6px))">21:00
+      <div class="dot" style="left: calc(50% - var(--su) * 11.4); top: 1440px"><div class="type-body" style="transform: translate(calc(-50% - 16px), calc(-50% - 6px))">21:00
 Cake cutting</div></div>
-      <div class="dot" style="left: calc(50% - var(--su) * 3.6); top: 2266px"><div class="type-body" style="transform: translate(calc(-50% + 14px), calc(-50% + 10px))">23:30
+      <div class="dot" style="left: calc(50% + var(--su) * 15); top: 1620px"><div class="type-body" style="transform: translate(calc(-50% + 14px), calc(-50% + 10px))">23:30
 Finish</div></div>
     </div>
 
@@ -63,12 +65,6 @@ Big Penny Social at 14:00 to continue the celebrations</div>
 <a href="mailto:bissywedding@gmail.com">bissywedding@gmail.com</a>
 
 Please let us know any dietary requirements</div>
-
-    <div class="type-heading block h-gifting">Gifting</div>
-    <div class="type-body block s-gifting">We don’t expect gifts. However, if you would like
-to give us something, a contribution to our
-wedding list would be greatly appreciated.</div>
-    <a href="#" class="type-body block s-weddinglist">Wedding list</a>
 
     <div class="tail">
     <div class="type-heading block h-info">Useful Info</div>
@@ -90,11 +86,6 @@ Victoria Line, Overground
 
 Bus:
 123, 230, N73</div>
-      </details>
-      <details class="acc">
-        <summary class="type-body">Parking</summary>
-        <div class="acc-body type-body">There is car park at the venue, though this
-closes at 5pm.</div>
       </details>
       <details class="acc">
         <summary class="type-body">Contacts on the day</summary>
