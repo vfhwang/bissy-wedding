@@ -9,13 +9,17 @@
 <link rel="preload" href="/assets/fonts/TT-Commons-Medium.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="/css/styles.css">
 <style>
-/* placeholder page: just the title, a coming-soon line, and the confetti */
-.page {
-  min-height: 100vh;
-  min-height: 100svh;
-}
+/* north page: no next-day section, so the desktop canvas is shorter and the
+   fixed block positions move up. Mobile flows automatically. */
 @media (min-width: 701px) {
-  .layer-content { padding-top: 0; }
+  .layer-content { padding-top: 3500px; }
+  .h-dresscode { top: 2420px; }
+  .s-dresscode { top: 2490px; }
+  .h-rsvp { top: 2700px; }
+  .s-rsvp { top: 2770px; }
+  .h-gifting { top: 3060px; }
+  .s-gifting { top: 3130px; }
+  .s-weddinglist { top: 3268px; }
 }
 </style>
 </head>
@@ -29,7 +33,94 @@
   <div id="flip-layer"></div>
 
   <div class="layer-content">
-    <div class="type-body block s-date">Details coming soon</div>
+    <div class="type-body block s-date">Saturday 26th September 2026
+3pm</div>
+
+    <div class="type-body block s-venue">St Botolph’s Church
+Carlton in Cleveland,
+TS9 7DL</div>
+
+    <div class="type-body block s-intro">We are getting married and we’d love to celebrate with you!</div>
+
+    <div class="schedule-dots">
+      <div class="dot" style="left: calc(50% - var(--su) * 30); top: 1120px"><div class="type-body" style="transform: translate(calc(-50% + 10px), calc(-50% - 12px))">14:30
+Guest arrival</div></div>
+      <div class="dot" style="left: calc(50% + var(--su) * 20); top: 1264px"><div class="type-body" style="transform: translate(calc(-50% + 8px), calc(-50% + 14px))">15:00
+Blessing service at
+St Botolph’s Church</div></div>
+      <div class="dot" style="left: calc(50% - var(--su) * 25); top: 1430px"><div class="type-body" style="transform: translate(calc(-50% - 10px), calc(-50% + 14px))">16:00
+Walk to Carlton village hall
+for drinks and canapés</div></div>
+      <div class="dot" style="left: calc(50% + var(--su) * 25); top: 1600px"><div class="type-body" style="transform: translate(calc(-50% + 8px), calc(-50% + 14px))">17:00
+Guests to take their
+seats for speeches</div></div>
+      <div class="dot" style="left: calc(50% - var(--su) * 8); top: 1760px"><div class="type-body" style="transform: translate(calc(-50% + 16px), calc(-50% + 4px))">17:30
+Buffet dinner</div></div>
+      <div class="dot" style="left: calc(50% + var(--su) * 28); top: 1900px"><div class="type-body" style="transform: translate(calc(-50% - 16px), calc(-50% - 6px))">19:15
+Cake cutting</div></div>
+      <div class="dot" style="left: calc(50% - var(--su) * 20); top: 2040px"><div class="type-body" style="transform: translate(calc(-50% - 12px), calc(-50% + 12px))">19:30
+Silent disco</div></div>
+      <div class="dot" style="left: calc(50% + var(--su) * 10); top: 2180px"><div class="type-body" style="transform: translate(calc(-50% + 14px), calc(-50% + 10px))">23:00
+Carriages</div></div>
+    </div>
+
+    <div class="type-heading block h-dresscode">Dress code</div>
+    <div class="type-body block s-dresscode">Wear whatever you enjoy wearing</div>
+
+    <div class="type-heading block h-rsvp">RSVP</div>
+    <div class="type-body block s-rsvp">Please RSVP by 31st August 2026
+<a href="mailto:sarahgirwin@gmail.com">sarahgirwin@gmail.com</a>
+
+Please inform us of any dietary allergies</div>
+
+    <div class="type-heading block h-gifting">Gifting</div>
+    <div class="type-body block s-gifting">We don’t expect gifts, you helping us celebrate
+our marriage is special enough. However,
+if you would like to give us something
+small that would be greatly appreciated.</div>
+    <a href="https://www.weddingpresentco.com/find-list/334212" class="type-body block s-weddinglist">Wedding list</a>
+
+    <div class="tail">
+    <div class="type-heading block h-info">Useful Info</div>
+    <div class="accordions">
+      <details class="acc">
+        <summary class="type-body">Address</summary>
+        <div class="acc-body type-body">St Botolph’s Church
+Carlton in Cleveland
+TS9 7DL</div>
+      </details>
+      <details class="acc">
+        <summary class="type-body">Access</summary>
+        <div class="acc-body type-body">There are two sets of steps leading up
+to the church. For step free access
+to the church please enquire</div>
+      </details>
+      <details class="acc">
+        <summary class="type-body">Parking</summary>
+        <div class="acc-body type-body">Suggested parking is in the field close to
+Field Edge which will be clearly signed.
+
+However, for those who would rather park
+closer to the church and/or the village hall
+there is plenty of roadside parking
+in the village.
+
+There is limited parking at the church
+and no parking at the village hall</div>
+      </details>
+      <details class="acc">
+        <summary class="type-body">Contact details on the day</summary>
+        <div class="acc-body type-body">Sarah Irwin
+0777 902 3971</div>
+      </details>
+    </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <img class="footer-photo" src="/assets/images/beau-on-bike.jpg" alt="Beau in a yellow raincoat sitting on a motorbike" width="640" height="492" loading="lazy">
+    <div class="footer-message type-body"><span>Vroom vroom see you there!</span></div>
   </div>
 
 </div>
