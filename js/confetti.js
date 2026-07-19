@@ -134,8 +134,11 @@
     return { left: r.left - p.left, right: r.right - p.left, top: r.top - p.top, bottom: r.bottom - p.top };
   }
 
+  // null on pages without the footer sign-off (e.g. the placeholder site) —
+  // those pages get no pile
   function msgCentre() {
     var span = document.querySelector('.footer-message span');
+    if (!span) return null;
     var srect = span.getBoundingClientRect(), prect = pageEl.getBoundingClientRect();
     return {
       left: srect.left - prect.left, right: srect.right - prect.left,
@@ -209,6 +212,7 @@
     // guaranteed cover — a jittered grid over the photo box and a row along
     // the measured text — then a scatter heaped around the whole cluster.
     var mc = msgCentre();
+    if (mc) {
     pileMsgY = mc.y;
     var psc = mobile ? 0.5 : 0.62;
     var pn = 0;
@@ -258,6 +262,7 @@
         heapY + Math.sin(ang2) * r2 * spreadY * 1.4,
         (Math.random() - 0.5) * 2.6, psc).pile = true;
     }
+    }
 
     // throw-in: only the confetti visible on load (the hero scatter) is thrown
     // from the centre-bottom edge of the screen after the text fade, spinning
@@ -302,7 +307,9 @@
       cam.bottom = canH;
       cam.updateProjectionMatrix();
     }
-    var dy = msgCentre().y - pileMsgY;
+    var m = msgCentre();
+    if (!m) return;
+    var dy = m.y - pileMsgY;
     if (Math.abs(dy) < 0.1) return;
     pileMsgY += dy;
     for (var i = 0; i < pieces.length; i++) {
