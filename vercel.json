@@ -22,6 +22,16 @@
     },
     {
       "source": "/",
+      "has": [{ "type": "host", "value": "bissyweddingparty.com" }],
+      "destination": "/party/index.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.bissyweddingparty.com" }],
+      "destination": "/party/index.html"
+    },
+    {
+      "source": "/",
       "destination": "/london/index.html"
     }
   ]
